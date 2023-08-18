@@ -131,8 +131,10 @@ class Llama:
         prev_pos = 0
         eos_reached = torch.tensor([False] * bsz, device="cuda")
         input_text_mask = tokens != pad_id
+        hs = []
         for cur_pos in range(min_prompt_len, total_len):
-            logits = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)
+            logits, h = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)
+            hs.append(h)
             if logprobs:
                 token_logprobs[:, prev_pos + 1 : cur_pos + 1] = -F.cross_entropy(
                     input=logits.transpose(1, 2),
@@ -176,7 +178,7 @@ class Llama:
                 probs = probs[:eos_idx] if logprobs else None
             out_tokens.append(toks)
             out_logprobs.append(probs)
-        return (out_tokens, out_logprobs if logprobs else None)
+        return (out_tokens, out_logprobs if logprobs else None, hs)
 
     def text_completion(
         self,
@@ -190,7 +192,7 @@ class Llama:
         if max_gen_len is None:
             max_gen_len = self.model.params.max_seq_len - 1
         prompt_tokens = [self.tokenizer.encode(x, bos=True, eos=False) for x in prompts]
-        generation_tokens, generation_logprobs = self.generate(
+        generation_tokens, generation_logprobs, hs = self.generate(
             prompt_tokens=prompt_tokens,
             max_gen_len=max_gen_len,
             temperature=temperature,
@@ -207,7 +209,7 @@ class Llama:
                 }
                 for t, logprobs_i in zip(generation_tokens, generation_logprobs)
             ]
-        return [{"generation": self.tokenizer.decode(t)} for t in generation_tokens]
+        return [{"generation": self.tokenizer.decode(t)} for t in generation_tokens], hs
 
     def chat_completion(
         self,
@@ -265,7 +267,7 @@ class Llama:
             )
             prompt_tokens.append(dialog_tokens)
 
-        generation_tokens, generation_logprobs = self.generate(
+        generation_tokens, generation_logprobs, hs = self.generate(
             prompt_tokens=prompt_tokens,
             max_gen_len=max_gen_len,
             temperature=temperature,
@@ -296,7 +298,7 @@ class Llama:
                 }
             }
             for t, unsafe in zip(generation_tokens, unsafe_requests)
-        ]
+        ], hs
 
 
 def sample_top_p(probs, p):

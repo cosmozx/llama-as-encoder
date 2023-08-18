@@ -39,7 +39,7 @@ def main(
         plush girafe => girafe peluche
         cheese =>""",
     ]
-    results = generator.text_completion(
+    results, hs = generator.text_completion(
         prompts,
         max_gen_len=max_gen_len,
         temperature=temperature,
@@ -49,6 +49,7 @@ def main(
         print(prompt)
         print(f"> {result['generation']}")
         print("\n==================================\n")
+        print(hs[0].shape)
 
 
 if __name__ == "__main__":

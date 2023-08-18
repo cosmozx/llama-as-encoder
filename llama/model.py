@@ -283,6 +283,6 @@ class Transformer(nn.Module):
 
         for layer in self.layers:
             h = layer(h, start_pos, freqs_cis, mask)
-        h = self.norm(h)
-        output = self.output(h).float()
-        return output
+        h_hat = self.norm(h)
+        output = self.output(h_hat).float()
+        return output, h.float()
