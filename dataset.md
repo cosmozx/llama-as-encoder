@@ -11,7 +11,9 @@
 * PIQA https://yonatanbisk.com/piqa/
 * SIQA https://leaderboard.allenai.org/socialiqa/submissions/public
 * WinoGrande https://winogrande.allenai.org/
-* ARC https://allenai.org/data/arc https://leaderboard.allenai.org/arc_easy/submissions/get-started
+* ARC 
+    * https://allenai.org/data/arc
+    * https://leaderboard.allenai.org/arc_easy/submissions/get-started
 * CommonsenseQA https://www.tau-nlp.sites.tau.ac.il/commonsenseqa
 * TriviaQA https://nlp.cs.washington.edu/triviaqa/
 * Big Bench Hard https://github.com/suzgunmirac/BIG-Bench-Hard
@@ -29,5 +31,5 @@
 * IMDB https://ai.stanford.edu/~amaas/data/sentiment/
 
 ## Reference
-https://arxiv.org/pdf/2307.09288.pdf
-https://arxiv.org/pdf/2211.09110.pdf
+* https://arxiv.org/pdf/2307.09288.pdf
+* https://arxiv.org/pdf/2211.09110.pdf
