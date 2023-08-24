@@ -12,7 +12,7 @@ def main(
     temperature: float = 0.6,
     top_p: float = 0.9,
     max_seq_len: int = 128,
-    max_gen_len: int = 64,
+    max_gen_len: int = 2,
     max_batch_size: int = 4,
 ):
     generator = Llama.build(
@@ -22,22 +22,28 @@ def main(
         max_batch_size=max_batch_size,
     )
 
-    prompts = [
-        # For these prompts, the expected answer is the natural continuation of the prompt
-        "I believe the meaning of life is",
-        "Simply put, the theory of relativity states that ",
-        """A brief message congratulating the team on the launch:
+    # prompts = [
+    #     # For these prompts, the expected answer is the natural continuation of the prompt
+    #     "I believe the meaning of life is",
+    #     "Simply put, the theory of relativity states that ",
+    #     """A brief message congratulating the team on the launch:
+
+    #     Hi everyone,
+        
+    #     I just """,
+    #     # Few shot prompt (providing a few examples before asking model to complete more);
+    #     """Translate English to French:
+        
+    #     sea otter => loutre de mer
+    #     peppermint => menthe poivrée
+    #     plush girafe => girafe peluche
+    #     cheese =>""",
+    # ]
+    prompts = ["""A brief message congratulating the team on the launch:
 
         Hi everyone,
         
         I just """,
-        # Few shot prompt (providing a few examples before asking model to complete more);
-        """Translate English to French:
-        
-        sea otter => loutre de mer
-        peppermint => menthe poivrée
-        plush girafe => girafe peluche
-        cheese =>""",
     ]
     results, hs = generator.text_completion(
         prompts,
@@ -49,7 +55,10 @@ def main(
         print(prompt)
         print(f"> {result['generation']}")
         print("\n==================================\n")
-        print(hs[0].shape)
+        print(hs[0].shape, hs[1].shape)
+        print(result['generation'].split(' '))
+        print(len(result['generation'].split(' ')))
+        print(len(hs))
 
 
 if __name__ == "__main__":

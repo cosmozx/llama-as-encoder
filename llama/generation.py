@@ -114,6 +114,7 @@ class Llama:
     ) -> Tuple[List[List[int]], Optional[List[List[float]]]]:
         params = self.model.params
         bsz = len(prompt_tokens)
+        print(bsz, prompt_tokens)
         assert bsz <= params.max_batch_size, (bsz, params.max_batch_size)
 
         min_prompt_len = min(len(t) for t in prompt_tokens)
@@ -134,6 +135,7 @@ class Llama:
         hs = []
         for cur_pos in range(min_prompt_len, total_len):
             logits, h = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)
+            print('l', logits.shape, logits[:, -1].shape)
             hs.append(h)
             if logprobs:
                 token_logprobs[:, prev_pos + 1 : cur_pos + 1] = -F.cross_entropy(
@@ -147,8 +149,11 @@ class Llama:
                 next_token = sample_top_p(probs, top_p)
             else:
                 next_token = torch.argmax(logits[:, -1], dim=-1)
+                print(next_token)
 
             next_token = next_token.reshape(-1)
+            print(next_token)
+
             # only replace token if prompt has already been generated
             next_token = torch.where(
                 input_text_mask[:, cur_pos], tokens[:, cur_pos], next_token
@@ -189,6 +194,7 @@ class Llama:
         logprobs: bool = False,
         echo: bool = False,
     ) -> List[CompletionPrediction]:
+        print(prompts)
         if max_gen_len is None:
             max_gen_len = self.model.params.max_seq_len - 1
         prompt_tokens = [self.tokenizer.encode(x, bos=True, eos=False) for x in prompts]
