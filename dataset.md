@@ -30,6 +30,13 @@
 ## Sentiment analysis
 * IMDB https://ai.stanford.edu/~amaas/data/sentiment/
 
+## Long Context
+* LongChat-Lines
+    * https://huggingface.co/datasets/abacusai/LongChat-Lines
+    * https://github.com/abacusai/Long-Context
+* FreeFormQA https://huggingface.co/datasets/abacusai/WikiQA-Free_Form_QA/viewer/abacusai--WikiQA-Free_Form_QA/2k?row=21
+* AlteredNumericQA https://huggingface.co/datasets/abacusai/WikiQA-Altered_Numeric_QA/viewer/abacusai--WikiQA-Altered_Numeric_QA/16k?row=0
+
 ## Reference
 * https://arxiv.org/pdf/2307.09288.pdf
 * https://arxiv.org/pdf/2211.09110.pdf

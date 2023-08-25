@@ -135,7 +135,6 @@ class Llama:
         hs = []
         for cur_pos in range(min_prompt_len, total_len):
             logits, h = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)
-            print('l', logits.shape, logits[:, -1].shape)
             hs.append(h)
             if logprobs:
                 token_logprobs[:, prev_pos + 1 : cur_pos + 1] = -F.cross_entropy(
